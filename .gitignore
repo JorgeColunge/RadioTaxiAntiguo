@@ -1,0 +1,15 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Certificados
+*.crt
+*.key
+
+# Archivos de configuración del editor
+.vscode/
+
+# Archivos de bloqueo
+package-lock.json
