@@ -12,7 +12,6 @@ const HomePageContentTipo2 = () => {
 
   return (
     <div>
-      <h1>Taxista</h1>
       <MapComponent id_usuario={id_usuario} />
     </div>
   );

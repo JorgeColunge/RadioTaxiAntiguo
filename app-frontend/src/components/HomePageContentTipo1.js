@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'; 
+import React, { useEffect } from 'react';
 import UsersMap from './UsersMap';
 import socket from '../Socket';
-import TaxiRequestButton from './TaxiRequestButton';
 import TaxiRequestForm from './TaxiRequestForm'; // Importa el formulario de solicitud de taxi
 
 const HomePageContentTipo1 = () => {
@@ -11,11 +10,15 @@ const HomePageContentTipo1 = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Operadora Radio Taxi</h1>
-      <TaxiRequestForm /> {/* Agrega el formulario de solicitud de taxi */}
-      <TaxiRequestButton /> {/* Botón para simular la solicitud de taxi */}
-      <UsersMap />
+    <div className="container">
+      <div className="row">
+        <div className="col-md-8">
+          <UsersMap />
+        </div>
+        <div className="col-md-4">
+          <TaxiRequestForm />
+        </div>
+      </div>
     </div>
   );
 };

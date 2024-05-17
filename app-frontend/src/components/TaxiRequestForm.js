@@ -53,28 +53,57 @@ const TaxiRequestForm = () => {
   };
 
   return (
-    <div>
-      <h2>Formulario de Solicitud de Taxi</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleRequestTaxi}>
-        <label>
-          Celular:
-          <input type="text" value={clientId} onChange={(e) => setClientId(e.target.value)} required />
-        </label>
-        <label>
-          Nombre:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-        </label>
-        <label>
-          Dirección de Inicio:
-          <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
-        </label>
-        <label>
-          Dirección de Destino:
-          <input type="text" value={endAddress} onChange={(e) => setEndAddress(e.target.value)} required />
-        </label>
-        <button type="submit">Solicitar Taxi</button>
-      </form>
+    <div className="card">
+      <div className="card-body">
+        <h2 className="card-title">Formulario de Solicitud de Taxi</h2>
+        {message && <p className="alert alert-info">{message}</p>}
+        <form onSubmit={handleRequestTaxi}>
+          <div className="form-group">
+            <label>ID del Cliente:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Nombre:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Dirección de Inicio:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Dirección de Destino:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={endAddress}
+              onChange={(e) => setEndAddress(e.target.value)}
+              required
+            />
+          </div>
+          <br></br>
+          <button type="submit" className="btn btn-warning btn-block">
+            Solicitar Taxi
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

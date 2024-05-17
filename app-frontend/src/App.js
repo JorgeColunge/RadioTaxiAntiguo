@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import HomePage from "./HomePage";
+import UserPage from "./components/UserPage";
 import UsersMap from "./ControlPage";
+import RequireAuth from './RequireAuth';
+import RedirectAuth from './RedirectAuth';
 import socket from './Socket'; // Importa la instancia del socket
 
 function App() {
@@ -28,6 +31,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/map" element={<UsersMap />} />
+        <Route path="/user" element={<RequireAuth><UserPage /></RequireAuth>} />
       </Routes>
     </Router>
   );
