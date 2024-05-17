@@ -24,9 +24,6 @@ const HomePage = () => {
           <Link to="/chat" className="btn btn-link text-dark ml-2">
             <ChatDots size={30} />
           </Link>
-          <Link to="/map" className="btn btn-link text-dark ml-2">
-            <Globe size={30} />
-          </Link>
           <LogoutButton className="btn btn-warning ml-2" />
         </div>
       </div>
