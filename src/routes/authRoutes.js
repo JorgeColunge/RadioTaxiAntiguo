@@ -70,4 +70,19 @@ router.get('/user/:id', async (req, res) => {
 // Ruta para obtener la lista de todos los usuarios
 router.get('/users', userController.getAllUsers);
 
+// Ruta para editar un usuario
+router.put('/user/:id', upload.single('foto'), (req, res) => {
+  console.log(req.body);
+  if (req.file) {
+    req.body.foto = req.file.path;
+  }
+
+  authController.editUser(req, res);
+});
+
+// Ruta para eliminar un usuario
+router.delete('/user/:id', authController.deleteUser);
+
+
+
 module.exports = router;

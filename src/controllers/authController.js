@@ -72,3 +72,106 @@ exports.login = async (req, res) => {
     res.status(500).send('Error al iniciar sesión');
   }
 };
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await pool.query('SELECT id_usuario, nombre, email, tipo FROM usuarios');
+    res.json(allUsers.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al obtener la lista de usuarios.');
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, email, tipo } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE usuarios SET nombre = $1, email = $2, tipo = $3 WHERE id_usuario = $4 RETURNING *',
+      [nombre, email, tipo, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al actualizar el usuario.');
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query('DELETE FROM usuarios WHERE id_usuario = $1 RETURNING *', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al eliminar el usuario.');
+  }
+};
+
+exports.editUser = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, password, foto, tipo } = req.body;
+
+  try {
+    const user = await pool.query('SELECT * FROM usuarios WHERE id_usuario = $1;', [id]);
+
+    if (user.rows.length === 0) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    let passwordHash = user.rows[0].password;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      passwordHash = await bcrypt.hash(password, salt);
+    }
+
+    const fotoURL = foto || user.rows[0].foto;
+
+    await pool.query(
+      'UPDATE usuarios SET nombre = $1, password = $2, foto = $3, tipo = $4 WHERE id_usuario = $5;',
+      [nombre, passwordHash, fotoURL, tipo, id]
+    );
+
+    res.status(200).json({
+      message: "Usuario actualizado exitosamente",
+      nombre: nombre,
+      foto: fotoURL,
+      tipo: tipo
+    });
+  } catch (err) {
+    console.error('Error al actualizar al usuario:', err);
+    res.status(500).send('Error al actualizar al usuario');
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await pool.query('SELECT * FROM usuarios WHERE id_usuario = $1;', [id]);
+
+    if (user.rows.length === 0) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    await pool.query('DELETE FROM usuarios WHERE id_usuario = $1;', [id]);
+
+    res.status(200).json({ message: 'Usuario eliminado exitosamente' });
+  } catch (err) {
+    console.error('Error al eliminar al usuario:', err);
+    res.status(500).send('Error al eliminar al usuario');
+  }
+};

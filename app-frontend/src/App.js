@@ -5,11 +5,11 @@ import Login from "./Login";
 import Register from "./Register";
 import HomePage from "./HomePage";
 import UserPage from "./components/UserPage";
-import UsersMap from "./ControlPage";
 import UserList from './components/UserList';
 import RequireAuth from './RequireAuth';
 import RedirectAuth from './RedirectAuth';
 import socket from './Socket'; // Importa la instancia del socket
+import Layout from './components/Layout';
 
 function App() {
   useEffect(() => {
@@ -30,10 +30,9 @@ function App() {
       <Routes>
         <Route path="/" element={<RedirectAuth><Login /></RedirectAuth>} />
         <Route path="/register" element={<RedirectAuth><Register /></RedirectAuth>} />
-        <Route path="/home" element={<RequireAuth><HomePage /></RequireAuth>} />
-        <Route path="/map" element={<RequireAuth><UsersMap /></RequireAuth>} />
-        <Route path="/user" element={<RequireAuth><UserPage /></RequireAuth>} />
-        <Route path="/users-list" element={<RequireAuth><UserList /></RequireAuth>} />
+        <Route path="/home" Component={HomePage} element={<RequireAuth><HomePage /></RequireAuth>} />
+        <Route path="/user" Component={UserPage} element={<RequireAuth><UserPage /></RequireAuth>} />
+        <Route path="/users-list" Component={UserList} element={<RequireAuth><UserList /></RequireAuth>} />
       </Routes>
     </Router>
   );

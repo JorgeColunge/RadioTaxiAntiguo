@@ -1,13 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Person, People, ChatDots, Globe } from 'react-bootstrap-icons';
-import HomePageContentTipo1 from './components/HomePageContentTipo1';
-import HomePageContentTipo2 from './components/HomePageContentTipo2';
-import LogoutButton from './components/LogoutButton'; // Asegúrate de tener este componente
+import LogoutButton from './LogoutButton'; // Asegúrate de tener este componente
 
-const HomePage = () => {
-  const tipo_usuario = localStorage.getItem('tipo_usuario');
-
+const Layout = ({ children }) => {
   return (
     <div className="container-fluid">
       <div className="row align-items-center justify-content-between" style={{ padding: '20px' }}>
@@ -29,9 +25,11 @@ const HomePage = () => {
           <LogoutButton className="btn btn-warning ml-2" />
         </div>
       </div>
-      {tipo_usuario === 'tipo1' ? <HomePageContentTipo1 /> : <HomePageContentTipo2 />}
+      <div>
+        {children}
+      </div>
     </div>
   );
 };
 
-export default HomePage;
+export default Layout;
