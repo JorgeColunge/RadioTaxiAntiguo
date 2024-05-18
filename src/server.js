@@ -3,14 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const pool = require('./config/dbConfig');
-const http = require('http'); 
+const http = require('http');
 const socketIo = require('socket.io');
+const session = require('express-session');
 
 const app = express();
 
 // Configuración de Socket.io utilizando HTTP
 const httpServer = http.createServer(app);
-const io = require('socket.io')(httpServer, {
+const io = socketIo(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -25,6 +26,7 @@ io.on('connection', (socket) => {
     try {
       await pool.query('UPDATE usuarios SET socket_id = $1 WHERE id_usuario = $2', [socket.id, id_usuario]);
       console.log(`Usuario ${id_usuario} registrado con socket ID ${socket.id}`);
+      io.emit('userUpdate');
     } catch (err) {
       console.error('Error al registrar socket ID:', err);
     }
@@ -34,6 +36,7 @@ io.on('connection', (socket) => {
     try {
       await pool.query('UPDATE usuarios SET socket_id = NULL WHERE socket_id = $1', [socket.id]);
       console.log(`Socket ID ${socket.id} ha sido removido`);
+      io.emit('userUpdate');
     } catch (err) {
       console.error('Error al remover socket ID:', err);
     }
@@ -42,9 +45,15 @@ io.on('connection', (socket) => {
 
 app.use(express.json());
 app.use(cors());
+app.use(session({
+  secret: 'secret_key', // Reemplaza 'secret_key' por una clave secreta segura
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 1800000 } // 30 minutos
+}));
 
 const geolocationRoutes = require('./routes/geolocationRoutes')(io);
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes')(io); // Pass `io` to `authRoutes`
 
 app.use('/api/auth', authRoutes);
 app.use('/api/geolocation', geolocationRoutes);
@@ -68,6 +77,20 @@ app.get('/db', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Error al conectar con la base de datos');
+  }
+});
+
+// Cerrar sesión al cerrar la ventana del navegador
+app.get('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error al cerrar sesión:', err);
+      }
+      res.send('Sesión cerrada');
+    });
+  } else {
+    res.end();
   }
 });
 

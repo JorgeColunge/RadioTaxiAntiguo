@@ -30,14 +30,12 @@ function App() {
       <Routes>
         <Route path="/" element={<RedirectAuth><Login /></RedirectAuth>} />
         <Route path="/register" element={<RedirectAuth><Register /></RedirectAuth>} />
-        <Route path="/home" Component={HomePage} element={<RequireAuth><HomePage /></RequireAuth>} />
-        <Route path="/user" Component={UserPage} element={<RequireAuth><UserPage /></RequireAuth>} />
-        <Route path="/users-list" Component={UserList} element={<RequireAuth><UserList /></RequireAuth>} />
+        <Route path="/home" element={<RequireAuth><HomePage /></RequireAuth>} />
+        <Route path="/user" element={<RequireAuth><UserPage /></RequireAuth>} />
+        <Route path="/users-list" element={<RequireAuth><UserList /></RequireAuth>} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
